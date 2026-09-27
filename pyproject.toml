@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "asimtool"
-version = "0.1.0"
+version = "0.4.0"
 description = "AI-powered developer & language toolkit — grammar, translation, quizzes, bug reports, PR reviews, trip planning, and more."
 readme = "README.md"
 license = {text = "MIT"}
@@ -39,10 +39,17 @@ dependencies = [
 
 [project.optional-dependencies]
 pdf = ["pypdf>=3.0"]
+ocr = ["pymupdf>=1.23", "Pillow>=9.0"]
 language = ["langdetect>=1.0"]
+docx = ["python-docx>=0.8"]
+tts = ["edge-tts>=6.1"]
 all = [
     "pypdf>=3.0",
     "langdetect>=1.0",
+    "pymupdf>=1.23",
+    "Pillow>=9.0",
+    "python-docx>=0.8",
+    "edge-tts>=6.1",
 ]
 
 [project.urls]

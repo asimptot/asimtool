@@ -22,7 +22,7 @@ def suggest_reply(
         Conversation messages in order (alternating Person A / Person B).
         At least one message is required (up to 3).
     tone : str
-        Tone of the reply (``"formal"``, ``"friendly"``, ``"casual"``).
+        Tone of the reply (``"formal"``, ``"friendly"``, ``"casual"``, ``"human"``).
     custom_prompt : str
         Optional idea to incorporate into the reply.
     provider : Provider, optional
@@ -49,6 +49,10 @@ def suggest_reply(
     except Exception:
         lang_code = "en"
 
+    # langdetect confuses Dutch with Afrikaans — remap af → nl
+    if lang_code == "af":
+        lang_code = "nl"
+
     lang_name_map = {
         "nl": "Dutch", "en": "English", "de": "German", "fr": "French",
         "es": "Spanish", "it": "Italian", "tr": "Turkish", "sv": "Swedish",
@@ -72,19 +76,37 @@ def suggest_reply(
         responder = "Person B"
         dialogue = f"Person A: {input1}\n"
 
-    base_prompt = (
-        f"You are {responder}, continuing a professional chat. "
-        f"The conversation is in {lang_name} — you MUST respond in {lang_name} only. "
-        f"Use a {tone} tone that feels natural, context-aware, and human. "
-        "Avoid robotic phrasing or unnecessary greetings unless natural. "
-        "Do not mention 'Person A' or 'Person B'. "
-        "If the user provided a suggestion (in 'Custom Prompt'), you may use it as inspiration, "
-        "but rewrite it clearly and fluently."
-    )
+    if tone == "human":
+        base_prompt = (
+            f"You are {responder} in a real conversation. "
+            f"Language: {lang_name} — reply ONLY in {lang_name}. "
+            "Your reply must sound like a real human typed it — casual, natural, imperfect. "
+            "Do NOT follow strict grammar rules. Use lowercase starts, contractions, relaxed punctuation. "
+            "You may add natural fillers or small imperfections — like a real person texting. "
+            "STRICT RULES: "
+            "Do NOT repeat, echo, paraphrase, or reference what was just said to you. "
+            "Get straight to your reply — no filler openers like 'Sure!', 'Of course!', 'Great!', 'Absolutely!' unless it fits naturally. "
+            "If the context calls for it, ask a follow-up question — like a real person would. "
+            "Never mention 'Person A' or 'Person B' in your reply. "
+            "The output must NOT look AI-generated at all. "
+            "Keep it to 1-2 sentences — focused, human, direct."
+        )
+    else:
+        base_prompt = (
+            f"You are {responder} in a real conversation. "
+            f"Language: {lang_name} — reply ONLY in {lang_name}. "
+            f"Tone: {tone}, natural and human — never robotic. "
+            "STRICT RULES: "
+            "Do NOT repeat, echo, paraphrase, or reference what was just said to you. "
+            "Get straight to your reply — no filler openers like 'Sure!', 'Of course!', 'Great!', 'Absolutely!' unless it fits naturally. "
+            "If the context calls for it, ask a follow-up question — like a real person would. "
+            "Never mention 'Person A' or 'Person B' in your reply. "
+            "Keep it to 1-2 sentences — focused, human, direct."
+        )
 
-    dialogue += f"\nNow, write {responder}'s reply in one or two sentences that move the conversation forward."
+    dialogue += f"\nWrite ONLY {responder}'s reply. Do NOT repeat or summarize what was said — just respond naturally as a human would."
     if custom_prompt:
-        dialogue += f" The reply should incorporate or expand on this idea: '{custom_prompt}'."
+        dialogue += f" Use this idea as loose inspiration (don't copy it literally): '{custom_prompt}'."
 
     final_prompt = base_prompt + "\n\nConversation:\n" + dialogue
 

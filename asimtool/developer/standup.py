@@ -42,7 +42,8 @@ def generate_standup(
 
     prompt = (
         "You are an AI that converts notes or free-text input into short, natural, spoken-style "
-        "English statements suitable for a Daily Standup meeting.\n\n"
+        "statements suitable for a Daily Standup meeting.\n\n"
+        "IMPORTANT: Detect the language of the input and respond in that SAME language. Do not translate.\n"
         "For each topic mentioned, produce 1–2 sentence updates that a developer could say aloud.\n"
         "Do NOT add intro phrases like \"Here's your update\".\n"
         "Start directly with the content.\n\n"

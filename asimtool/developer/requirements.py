@@ -50,8 +50,8 @@ def validate_requirements(
             f"Code:\n{commit}\n\n"
             f"Issues Identified:\n- Identify specific lines of code that may present potential problems, "
             f"focusing on integration points, edge cases, and dependencies.\n\n"
-            f"Approved Changes:\n- List and describe the changes that meet the requirements and risk.\n\n"
-            f"Questions:\n- Questions to ask a developer regarding impact on system-level functionality."
+            f"Approved Changes:\n- List and describe the changes that meet the requirements and risk, including positive impacts on system stability.\n\n"
+            f"Questions:\n- Questions to ask a developer regarding impact on system-level functionality, edge cases, and interactions."
         )
     else:
         prompt = (
@@ -59,10 +59,10 @@ def validate_requirements(
             f"Evaluate functionality only impacts on other components.\n\n"
             f"Requirements:\n{requirements}\n\n"
             f"Risk:\n{risk}\n\n"
-            f"Issues Identified:\n- Identify and quote specific lines that may present potential problems, "
-            f"focusing on system-level interactions and boundary conditions.\n\n"
+            f"Issues Identified:\n- Identify and quote specific lines of code that may present potential problems, "
+            f"focusing on system-level interactions, boundary conditions, and integration dependencies.\n\n"
             f"Questions:\n- Questions to ask a developer about overall system behavior, "
-            f"including edge cases and areas where further testing is needed."
+            f"including integration, edge cases, and areas where further testing is needed."
         )
 
     return call_ai(prompt, model="gpt_4_5", provider=provider)

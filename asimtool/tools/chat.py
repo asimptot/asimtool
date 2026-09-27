@@ -81,7 +81,7 @@ class Chat:
         self.max_history = max_history
         self._history: List[Dict[str, str]] = []
         self._providers = (
-            provider._providers if provider else _resolve_providers(DEFAULT_PROVIDER_NAMES)
+            provider.providers if provider else _resolve_providers(DEFAULT_PROVIDER_NAMES)
         )
         self._init_system_prompt()
 

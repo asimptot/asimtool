@@ -46,7 +46,7 @@ def find_venue(
         f"and from {country_2} {zip_code_2}. "
         f"Can you recommend me a {venue_type} for the meeting? Please find the approximate middle point "
         "between these two postcodes by calculating their geographical coordinates. "
-        "Once you find the middle point, provide the city, venue name, and full address. "
+        "Once you find the middle point, provide the city, venue name, and full address of a venue in that area. "
         "Format your response exactly like this (without any markdown ** or bold formatting):\n"
         "City: [city name]\n"
         "Venue: [venue name]\n"

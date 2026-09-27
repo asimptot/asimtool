@@ -2,10 +2,41 @@
 
 from __future__ import annotations
 
+import mimetypes
 import os
 from pathlib import Path
 
 import requests
+
+# Containers Whisper accepts, mapped to the MIME type we send.
+# iOS Voice Memos recordings (.m4a/.m4r/.aac/.caf) are AAC and need an
+# explicit type — the stdlib often guesses "application/octet-stream".
+AUDIO_MIME_TYPES = {
+    ".mp3": "audio/mpeg",
+    ".m4a": "audio/mp4",
+    ".m4r": "audio/mp4",
+    ".aac": "audio/aac",
+    ".caf": "audio/x-caf",
+    ".mp4": "audio/mp4",
+    ".wav": "audio/wav",
+    ".ogg": "audio/ogg",
+    ".oga": "audio/ogg",
+    ".opus": "audio/opus",
+    ".webm": "audio/webm",
+    ".flac": "audio/flac",
+    ".mpga": "audio/mpeg",
+    ".amr": "audio/amr",
+    ".3gp": "audio/3gpp",
+}
+
+
+def _mime_for(path: Path) -> str:
+    """Best-effort MIME type for an audio file."""
+    suffix = path.suffix.lower()
+    if suffix in AUDIO_MIME_TYPES:
+        return AUDIO_MIME_TYPES[suffix]
+    guessed, _ = mimetypes.guess_type(path.name)
+    return guessed or "application/octet-stream"
 
 
 def transcribe(
@@ -22,7 +53,8 @@ def transcribe(
     Parameters
     ----------
     audio_path : str
-        Path to the audio file (mp3, wav, m4a, ogg, webm, etc.).
+        Path to the audio file. MP3, WAV, M4A/M4R/AAC/CAF (iOS Voice Memos),
+        OGG, OPUS, WEBM and FLAC are supported.
     api_key : str, optional
         Groq API key. Falls back to ``$GROQ_API_KEY``.
     language : str, optional
@@ -55,7 +87,7 @@ def transcribe(
     headers = {"Authorization": f"Bearer {key}"}
 
     with open(str(path), "rb") as f:
-        files = {"file": (path.name, f, "audio/mpeg")}
+        files = {"file": (path.name, f, _mime_for(path))}
         data = {"model": model, "response_format": "json"}
         if language:
             data["language"] = language

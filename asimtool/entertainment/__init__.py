@@ -5,6 +5,7 @@ from .trip import plan_trip
 from .cafe import find_venue
 from .song import generate_lyrics
 from .solar import optimize_solar
+from .cost_of_living import compare_cost_of_living
 
 __all__ = [
     "recommend_movie",
@@ -12,4 +13,5 @@ __all__ = [
     "find_venue",
     "generate_lyrics",
     "optimize_solar",
+    "compare_cost_of_living",
 ]

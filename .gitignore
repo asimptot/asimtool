@@ -10,3 +10,7 @@ venv/
 env/
 .env
 *.log
+
+# Local-only shim: re-exports the package for scripts run from the parent
+# directory (where the "asimtool" folder shadows the installed package).
+/__init__.py
